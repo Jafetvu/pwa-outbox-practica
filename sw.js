@@ -1,7 +1,6 @@
 importScripts('./db-helper.js');
-const CACHE_STATIC = "cache-static-v2"; // AppShell (archivos del sitio)
+const CACHE_STATIC = "static-outbox-v3"; // AppShell (archivos del sitio)
 const CACHE_DYNAMIC = "cache-dynamic-v1"; // Datos de la API
-const CACHE_STATIC_NAME = 'static-outbox-v2';
 const STATIC_FILES = [
     './',
     './index.html',
@@ -80,7 +79,7 @@ function sincronizarPendientesSW() {
             }
 
             const promesasDeEnvio = pendientes.map((item) => {
-                return fetch('<https://jsonplaceholder.typicode.com/posts>', {
+                return fetch('https://jsonplaceholder.typicode.com/posts', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({

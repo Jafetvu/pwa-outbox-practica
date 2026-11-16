@@ -79,3 +79,42 @@ window.addEventListener('online', () => {
 });
 
 window.addEventListener('offline', actualizarIndicadorRed);
+
+function renderizarColaOutbox() {
+    return obtenerTodosLosRegistros().then((registros) => {
+        const lista = document.getElementById('lista-outbox');
+        lista.innerHTML = '';
+
+        registros.forEach((item) => {
+            const li = document.createElement('li');
+            const hora = new Date(item.fechaCreacion).toLocaleTimeString();
+            li.textContent = `${item.titulo} - ${item.estado} (${hora})`;
+            lista.appendChild(li);
+        });
+    });
+}
+
+document.getElementById('form-incidencia').addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const titulo = document.getElementById('titulo').value;
+    const descripcion = document.getElementById('descripcion').value;
+
+    procesarEnvioReporte({ titulo, descripcion });
+    e.target.reset();
+});
+
+document.getElementById('btn-purgar').addEventListener('click', () => {
+    obtenerTodosLosRegistros()
+        .then((registros) => {
+            const sincronizados = registros.filter((item) => item.estado === 'sincronizado');
+            return Promise.all(sincronizados.map((item) => eliminarRegistro(item.id)));
+        })
+        .then(() => {
+            return renderizarColaOutbox();
+        });
+});
+
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js');
+}

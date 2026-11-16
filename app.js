@@ -1,5 +1,3 @@
-importScripts('./db-helper.js');
-
 function procesarEnvioReporte(datosFormulario) {
     const endpoint = 'https://jsonplaceholder.typicode.com/posts';
 
@@ -72,6 +70,17 @@ function sincronizarPendientes() {
         });
 }
 
+function actualizarIndicadorRed() {
+    const badge = document.getElementById('badge-red');
+    if (navigator.onLine) {
+        badge.textContent = 'En Línea';
+        badge.className = 'badge online';
+    } else {
+        badge.textContent = 'Sin Conexión';
+        badge.className = 'badge offline';
+    }
+}
+
 // Escuchar el regreso de la conectividad
 window.addEventListener('online', () => {
     actualizarIndicadorRed();
@@ -118,3 +127,6 @@ document.getElementById('btn-purgar').addEventListener('click', () => {
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js');
 }
+
+actualizarIndicadorRed();
+renderizarColaOutbox();

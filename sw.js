@@ -1,4 +1,4 @@
-const CACHE_STATIC = "cache-static-v1"; // AppShell (archivos del sitio)
+const CACHE_STATIC = "cache-static-v2"; // AppShell (archivos del sitio)
 const CACHE_DYNAMIC = "cache-dynamic-v1"; // Datos de la API
 
 // 1. Estrategia: Primero Caché, luego Red (para archivos del sitio)
@@ -56,6 +56,7 @@ self.addEventListener("install", (event) => {
                 "./",
                 "./index.html",
                 "./styles.css",
+                "./manifest.json",
                 "./db-helper.js",
                 "./app.js"
             ]);
@@ -75,7 +76,7 @@ self.addEventListener("activate", (event) => {
                     }
                 })
             );
-        })
+        }).then(() => self.clients.claim())
     );
 });
 
